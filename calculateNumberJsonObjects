@@ -1,0 +1,12 @@
+int? calculateNumberJsonObjects(List<dynamic>? json) {
+  /// MODIFY CODE ONLY BELOW THIS LINE
+
+  // calculate length of a json file
+  if (json == null) {
+    return null;
+  } else {
+    return json.length;
+  }
+
+  /// MODIFY CODE ONLY ABOVE THIS LINE
+}
