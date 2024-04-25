@@ -1,0 +1,12 @@
+String refactorStatus(bool? status) {
+  /// MODIFY CODE ONLY BELOW THIS LINE
+
+  // convert true into "Active" and false into "Inactive"
+  if (status == true) {
+    return "Active";
+  } else {
+    return "Inactive";
+  }
+
+  /// MODIFY CODE ONLY ABOVE THIS LINE
+}
