@@ -1,0 +1,21 @@
+String? displayImageByGender(
+  String gender,
+  String? profilePhoto,
+) {
+  /// MODIFY CODE ONLY BELOW THIS LINE
+
+  // display "woman.png" if gender is equal "Mrs." or "man.png" if gender is equal "Mr."
+  if (profilePhoto != null) {
+    return profilePhoto;
+  } else {
+    if (gender == "Mrs.") {
+      return "woman.png";
+    } else if (gender == "Mr.") {
+      return "man.png";
+    } else {
+      return profilePhoto;
+    }
+  }
+
+  /// MODIFY CODE ONLY ABOVE THIS LINE
+}
