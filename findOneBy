@@ -1,0 +1,18 @@
+dynamic findOneBy(
+  List<String> json,
+  String columnName,
+  String value,
+) {
+  /// MODIFY CODE ONLY BELOW THIS LINE
+
+  // find one element by columnName and its value
+  for (String item in json) {
+    Map<String, dynamic> map = jsonDecode(item);
+    if (map[columnName] == value) {
+      return map;
+    }
+  }
+  return null;
+
+  /// MODIFY CODE ONLY ABOVE THIS LINE
+}
