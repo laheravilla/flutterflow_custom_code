@@ -5,7 +5,39 @@ List<dynamic>? filterJasonBy(
 ) {
   /// MODIFY CODE ONLY BELOW THIS LINE
 
-  return json.where((item) => item[key] == value).toList();
+  // Return null if any of the parameters are null
+  if (json == null || key == null || value == null) {
+    return null;
+  }
+
+  List<dynamic> result = [];
+
+  void _searchNested(Map<String, dynamic> map, Map<String, dynamic> parent) {
+    if (map.containsKey(key) && map[key] == value) {
+      result.add(parent);
+      return; // No need to search further within this map
+    }
+
+    for (var entry in map.entries) {
+      if (entry.value is Map<String, dynamic>) {
+        _searchNested(entry.value as Map<String, dynamic>, parent);
+      } else if (entry.value is List) {
+        for (var item in entry.value as List) {
+          if (item is Map<String, dynamic>) {
+            _searchNested(item, parent);
+          }
+        }
+      }
+    }
+  }
+
+  for (var item in json) {
+    if (item is Map<String, dynamic>) {
+      _searchNested(item, item);
+    }
+  }
+
+  return result.isEmpty ? null : result;
 
   /// MODIFY CODE ONLY ABOVE THIS LINE
 }
