@@ -10,10 +10,17 @@ List<dynamic>? filterJasonBy(
     return null;
   }
 
+  // Convert the string value to boolean if it's "true" or "false"
+  dynamic convertedValue = value.toLowerCase() == 'true'
+      ? true
+      : value.toLowerCase() == 'false'
+          ? false
+          : value;
+
   List<dynamic> result = [];
 
   void _searchNested(Map<String, dynamic> map, Map<String, dynamic> parent) {
-    if (map.containsKey(key) && map[key] == value) {
+    if (map.containsKey(key) && map[key] == convertedValue) {
       result.add(parent);
       return; // No need to search further within this map
     }
