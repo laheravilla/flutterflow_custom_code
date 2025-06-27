@@ -1,0 +1,71 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import '/flutter_flow/custom_functions.dart';
+import '/flutter_flow/lat_lng.dart';
+import '/flutter_flow/place.dart';
+import '/flutter_flow/uploaded_file.dart';
+import '/backend/schema/structs/index.dart';
+import '/backend/supabase/supabase.dart';
+import '/auth/supabase_auth/auth_util.dart';
+
+String? formatDate(
+  String datetime,
+  String? format,
+) {
+  /// MODIFY CODE ONLY BELOW THIS LINE
+
+  DateTime? actualDateTime;
+
+  // 1. If datetime string is empty, treat it as null and return '---'.
+  if (datetime.isEmpty) {
+    return '---';
+  }
+
+  // 2. Try to parse the string input into a DateTime object.
+  // DateTime.tryParse returns null if the string cannot be parsed.
+  actualDateTime = DateTime.tryParse(datetime);
+
+  // 3. If parsing failed (actualDateTime is null), return '---'.
+  if (actualDateTime == null) {
+    print(
+        'formatDate: Failed to parse input string "$datetime" into a DateTime object.');
+    return '---';
+  }
+
+  // Handle the case where format is null or empty
+  // We will use a local variable 'actualFormat' to store the formatting pattern
+  // taking into account the default value.
+  // If 'format' (the parameter) is null or empty, 'actualFormat' will take the value 'yMMMd'.
+  // Otherwise, 'actualFormat' will take the value of the 'format' parameter.
+  final String actualFormat =
+      format == null || format.isEmpty ? 'yMMMd' : format;
+
+  try {
+    // Determine the locale
+    // Uses the system's default locale, or 'en_US' as a fallback.
+    // To force French, you could use 'fr_FR' if necessary.
+    final String locale = Intl.defaultLocale ?? 'en_US';
+
+    // Create a DateFormat instance
+    // We use 'actualFormat' here, which is guaranteed not to be null or empty.
+    final DateFormat formatter = DateFormat(actualFormat, locale);
+
+    // Format the datetime and return the result.
+    // The '!' (null assertion operator) is used here because we've already
+    // checked that actualDateTime is not null in the preceding 'if' statement.
+    return formatter.format(actualDateTime!);
+  } catch (e) {
+    // Handle formatting errors
+    // In case of an error (e.g., an invalid formatting pattern),
+    // print the error to the console and return a clear error message.
+    print('Error formatting date: $e');
+    return 'Error formatting date';
+  }
+
+  /// MODIFY CODE ONLY ABOVE THIS LINE
+}
