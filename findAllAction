@@ -24,37 +24,4 @@ Future<List<dynamic>> queryDataAction(
       .select(selectCol)
       .order(orderBy, ascending: asc);
   return data;
-
-  // insert data
-  // await supabase.from('countries').insert([{'name': 'Singapore'},]);
-
-  // update data
-  // await supabase.from('countries').update({'name': 'Singapore'}).eq('id', 1);
-
-  // delete data
-  // await supabase.from('countries').delete().eq('id', 1);
-
-  // Upload file to bucket "public"
-  // final file = File('example.txt');
-  // file.writeAsStringSync('File content');
-  // final storageResponse = await supabase.storage.from('public').upload('example.txt', file);
-  // print('upload response : $storageResponse');
-
-  // Get download url
-  // final urlResponse = await supabase.storage.from('public').createSignedUrl('example.txt', 60);
-  // print('download url : $urlResponse');
-
-  // Download text file
-  // final fileResponse = await supabase.storage.from('public').download('example.txt');
-  // print('downloaded file : ${String.fromCharCodes(fileResponse)}');
-
-  // Delete file
-  // final deleteFileResponse = await supabase.storage.from('public').remove(['example.txt']);
-  // print('deleted file id : ${deleteFileResponse.first.id}');
-
-  // Local file cleanup
-  // if (file.existsSync()) file.deleteSync();
 }
-
-// Set your action name, define your arguments and return parameter,
-// and then add the boilerplate code using the green button on the right!
