@@ -1,0 +1,125 @@
+// Automatic FlutterFlow imports
+import '/backend/schema/structs/index.dart';
+import '/backend/supabase/supabase.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart'; // Imports other custom actions
+import '/flutter_flow/custom_functions.dart'; // Imports custom functions
+import 'package:flutter/material.dart';
+// Begin custom action code
+// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
+
+import 'dart:convert'; // Required for jsonDecode/jsonEncode if needed, but not directly for this setJsonField logic
+
+Future<bool> updateUserProfileFieldAction(
+  String fieldName,
+  dynamic dataUserProfile,
+  String? stringValue,
+  int? intValue,
+  double? doubleValue,
+  bool? boolValue,
+  DateTime? datetimeValue,
+  String? imgPathValue,
+) async {
+  // Determine the new value based on which typed parameter is provided (non-null).
+  // The order here implies precedence: if stringValue is not null, it will be used,
+  // otherwise, it checks intValue, and so on.
+  dynamic newValue;
+
+  if (stringValue != null) {
+    newValue = stringValue;
+  } else if (intValue != null) {
+    newValue = intValue;
+  } else if (doubleValue != null) {
+    newValue = doubleValue;
+  } else if (boolValue != null) {
+    newValue = boolValue;
+  } else if (datetimeValue != null) {
+    // Convert DateTime to ISO 8601 string for consistent JSON storage.
+    newValue = datetimeValue.toIso8601String();
+  } else if (imgPathValue != null) {
+    newValue = imgPathValue;
+  } else {
+    // If all value parameters are null, we intend to set the field to null.
+    newValue = null;
+  }
+
+  // --- Debugging Prints (will appear in FlutterFlow Test Mode console) ---
+  print(
+      'DEBUG: Attempting to update field: "$fieldName" with value: $newValue (Type: ${newValue.runtimeType})');
+  print(
+      'DEBUG: FFAppState().userProfile BEFORE update: ${FFAppState().userProfile}');
+  // --- End Debugging Prints ---
+
+  // Ensure FFAppState().userProfile is initialized as a Map.
+  // If it's null or not a Map, initialize it to an empty Map to prevent errors.
+  if (FFAppState().userProfile == null || FFAppState().userProfile is! Map) {
+    print(
+        'DEBUG: FFAppState().userProfile was null or not a Map. Initializing to empty map.');
+    FFAppState().userProfile = {};
+  }
+
+  try {
+    // Split the fieldName into path segments.
+    final List<String> pathSegments = fieldName.split('.');
+
+    // Use the custom recursive helper function to update the map.
+    final Map<String, dynamic> updatedProfileMap = _setJsonFieldRecursive(
+      FFAppState().userProfile
+          as Map<String, dynamic>, // Cast to Map<String, dynamic> for helper
+      pathSegments, // The list of path segments
+      newValue, // The new value to assign
+    );
+
+    // IMPORTANT: Reassign the updated Map back to FFAppState().userProfile.
+    // This notifies FlutterFlow's state management system of the change,
+    // which triggers UI updates for widgets listening to userProfile.
+    FFAppState().userProfile = updatedProfileMap;
+
+    // --- Debugging Prints ---
+    print(
+        'DEBUG: Successfully updated FFAppState().userProfile for "$fieldName".');
+    print(
+        'DEBUG: FFAppState().userProfile AFTER update: ${FFAppState().userProfile}');
+    // --- End Debugging Prints ---
+
+    return true; // Indicate success
+  } catch (e) {
+    // Catch any errors that occur during the JSON field update process.
+    print('ERROR: Failed to update user profile field "$fieldName": $e');
+    return false; // Indicate failure
+  }
+}
+
+/// Helper function to set a value at a specific dot-separated path in a nested Map.
+/// This function acts as a replacement for FlutterFlow's `setJsonField` if it's
+/// not accessible in the custom action context.
+Map<String, dynamic> _setJsonFieldRecursive(
+    Map<String, dynamic> jsonMap, List<String> pathSegments, dynamic value) {
+  if (pathSegments.isEmpty) {
+    // This case should ideally not be reached if path is handled correctly before recursion
+    // or if the initial call ensures pathSegments is not empty.
+    // For a root-level update, you'd directly set the map.
+    // If you intend to replace the whole map, this logic needs to be outside this helper.
+    return jsonMap;
+  }
+
+  Map<String, dynamic> currentMap =
+      Map.from(jsonMap); // Create a mutable copy to work with
+  Map<String, dynamic> tempMap = currentMap;
+
+  for (int i = 0; i < pathSegments.length; i++) {
+    String segment = pathSegments[i];
+    if (i == pathSegments.length - 1) {
+      // Last segment, set the value
+      tempMap[segment] = value;
+    } else {
+      // Not the last segment, navigate deeper or create nested map
+      if (!tempMap.containsKey(segment) || tempMap[segment] is! Map) {
+        tempMap[segment] = <String, dynamic>{};
+      }
+      tempMap = tempMap[segment] as Map<String, dynamic>;
+    }
+  }
+  return currentMap; // Return the modified top-level map
+}
