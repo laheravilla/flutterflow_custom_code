@@ -1,0 +1,27 @@
+// Automatic FlutterFlow imports
+import '/backend/schema/structs/index.dart';
+import '/backend/supabase/supabase.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart'; // Imports other custom actions
+import '/flutter_flow/custom_functions.dart'; // Imports custom functions
+import 'package:flutter/material.dart';
+// Begin custom action code
+// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
+
+Future<dynamic> findOneByAction(
+  String fromTable,
+  String selectCol,
+  String criteria,
+  String value,
+) async {
+  const supabaseUrl = 'https://pfazczfwgajkslxmfjwi.supabase.co';
+  const supabaseKey =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmYXpjemZ3Z2Fqa3NseG1mandpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc4Nzk5MzQsImV4cCI6MjA2MzQ1NTkzNH0.iLQhJhR8_rQd-f4Ig761ok70xJXafjKG8vx3H5VTLxg';
+  final supabase = SupabaseClient(supabaseUrl, supabaseKey);
+
+  // Query a single data row
+  final data =
+      await supabase.from(fromTable).select(selectCol).eq(criteria, value);
+  return data;
+}
